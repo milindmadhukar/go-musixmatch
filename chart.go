@@ -2,11 +2,12 @@ package gomusixmatch
 
 import (
 	"context"
-	"errors"
 	"fmt"
+
+	musixmatchParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
-type TopArtists struct {
+type topArtists struct {
 	Message struct {
 		Header struct {
 			StatusCode  int     `json:"status_code"`
@@ -20,7 +21,7 @@ type TopArtists struct {
 	} `json:"message"`
 }
 
-type TopTracks struct {
+type topTracks struct {
 	Message struct {
 		Header struct {
 			StatusCode  int     `json:"status_code"`
@@ -34,7 +35,41 @@ type TopTracks struct {
 	} `json:"message"`
 }
 
-func (topArtists *TopArtists) List() *[]Artist {
+// Gets the API response of the top artists of a given country.
+// ctx       : The context in which the request is made.
+// country   : A valid country code.
+//page      : Define the page number for paginated results.
+// page_size : Define the page size for paginated results. Range is 1 to 100.
+func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchParams.Param) (*topArtists, error) {
+
+	url := fmt.Sprintf("%schart.artists.get?apikey=%s",
+		client.baseURL,
+		client.apiKey)
+
+	options, err := processParams(params...)
+	if err != nil {
+		return nil, err
+	}
+	urlParams := options.UrlParams.Encode()
+
+	if urlParams != "" {
+		url += "&" + urlParams
+	}
+
+	var topArtists topArtists
+
+	err = client.get(ctx, url, &topArtists)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &topArtists, nil
+
+}
+
+// Gets the list of top artists as a slice of Artist structs.
+func (topArtists *topArtists) List() *[]Artist {
 
 	var artists []Artist
 
@@ -45,68 +80,36 @@ func (topArtists *TopArtists) List() *[]Artist {
 	return &artists
 }
 
-func (client *Client) GetTopArtists(ctx context.Context, country string, page uint, page_size uint) (*TopArtists, error) {
+// Gets the API response of the top songs of a given country.
+// ctx        : The context in which the request is made.
+// country    : A valid 2 letters country code. Set XW as worldwide
+// page       : Define the page number for paginated results.
+// page_size  : Define the page size for paginated results. Range is 1 to 100.
+// chart_name : Select among available charts:
+//     top - editorial chart.
+//     hot - Most viewed lyrics in the last 2 hours.
+//     mxmweekly - Most viewed lyrics in the last 7 days.
+//     mxmweekly_new - Most viewed lyrics in the last 7 days limited to new releases only.
+// has_lyrics : When set to true, filters only contents with lyrics.
+func (client *Client) GetTopTracks(ctx context.Context, params ...musixmatchParams.Param) (*topTracks, error) {
 
-	if page_size < 1 || page_size > 100 {
-		return nil, errors.New("Invalid page size. Page size should be between 1 and 100.")
-	}
-
-	_, found := findInSlice(country_codes, country)
-
-	if !found {
-		return nil, errors.New(fmt.Sprintf("%s is not a valid country code. You may use XW for worldwide charts.", country))
-	}
-
-	url := fmt.Sprintf("%schart.artists.get?apikey=%s&country=%s&page=%d&page_size=%d&format=json",
+	url := fmt.Sprintf("%schart.tracks.get?apikey=%s",
 		client.baseURL,
-		client.apiKey,
-		country,
-		page,
-		page_size)
+		client.apiKey)
 
-	var topArtists TopArtists
-
-	err := client.get(ctx, url, &topArtists)
-
+	options, err := processParams(params...)
 	if err != nil {
 		return nil, err
 	}
+	urlParams := options.UrlParams.Encode()
 
-	return &topArtists, nil
-
-}
-
-func (client *Client) GetTopTracks(ctx context.Context, country string, page uint, page_size uint, chart_name string, has_lyrics bool) (*TopTracks, error) {
-
-	_, ok := chart_names[chart_name]
-
-	if !ok {
-		// Help text if errored maybe
-		return nil, errors.New(fmt.Sprintf("%s is not a valid chart name.", chart_name))
+	if urlParams != "" {
+		url += "&" + urlParams
 	}
 
-	_, found := findInSlice(country_codes, country)
+	var topTracks topTracks
 
-	if !found {
-		return nil, errors.New(fmt.Sprintf("%s is not a valid country code. You may use XW for worldwide charts.", country))
-	}
-
-	var has_lyrics_int int8
-	if has_lyrics {
-		has_lyrics_int = 1
-	}
-	url := fmt.Sprintf("%schart.tracks.get?apikey=%s&country=%s&page=%d&page_size=%d&chart_name=%s&f_has_lyrics=%d",
-		client.baseURL,
-		client.apiKey,
-		country,
-		page,
-		page_size,
-		chart_name,
-		has_lyrics_int)
-
-	var topTracks TopTracks
-
-	err := client.get(ctx, url, &topTracks)
+	err = client.get(ctx, url, &topTracks)
 
 	if err != nil {
 		return nil, err
@@ -116,7 +119,8 @@ func (client *Client) GetTopTracks(ctx context.Context, country string, page uin
 
 }
 
-func (topTracks *TopTracks) List() *[]Track {
+// Gets the list of top tracks as a slice of Track structs.
+func (topTracks *topTracks) List() *[]Track {
 
 	var tracks []Track
 

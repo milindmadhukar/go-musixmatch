@@ -43,3 +43,25 @@ type Track struct {
 		} `json:"music_genre_list"`
 	} `json:"primary_genres"`
 }
+
+type Lyrics struct {
+	LyricsID          int       `json:"lyrics_id"`
+	Explicit          int       `json:"explicit"`
+	LyricsBody        string    `json:"lyrics_body"`
+	ScriptTrackingURL string    `json:"script_tracking_url"`
+	PixelTrackingURL  string    `json:"pixel_tracking_url"`
+	LyricsCopyright   string    `json:"lyrics_copyright"`
+	UpdatedTime       time.Time `json:"updated_time"`
+}
+
+type Snippet struct {
+	SnippetID         int       `json:"snippet_id"`
+	SnippetLanguage   string    `json:"snippet_language"`
+	Restricted        int       `json:"restricted"`
+	Instrumental      int       `json:"instrumental"`
+	SnippetBody       string    `json:"snippet_body"`
+	ScriptTrackingURL string    `json:"script_tracking_url"`
+	PixelTrackingURL  string    `json:"pixel_tracking_url"`
+	HTMLTrackingURL   string    `json:"html_tracking_url"`
+	UpdatedTime       time.Time `json:"updated_time"`
+}
