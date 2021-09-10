@@ -65,3 +65,11 @@ type Snippet struct {
 	HTMLTrackingURL   string    `json:"html_tracking_url"`
 	UpdatedTime       time.Time `json:"updated_time"`
 }
+
+type MusicGenre struct {
+	MusicGenreID           int    `json:"music_genre_id"`
+	MusicGenreParentID     int    `json:"music_genre_parent_id"`
+	MusicGenreName         string `json:"music_genre_name"`
+	MusicGenreNameExtended string `json:"music_genre_name_extended"`
+	MusicGenreVanity       string `json:"music_genre_vanity"`
+}

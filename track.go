@@ -192,3 +192,19 @@ func (client *Client) GetTrackSnippet(ctx context.Context, params ...musixmatchP
 	return &get_snippet, nil
 
 }
+
+// func (client *Client) GetTrackSubtitle(ctx context.Context, params ...musixmatchParams.Param) () {
+//
+// }
+
+// func (client *Client) GetTrackRichSync(ctx context.Context, params ...musixmatchParams.Param) () {
+//
+// }
+
+// func (client *Client) GetTrackLyricsTranslation(ctx context.Context, params ...musixmatchParams.Param) () {
+//
+// }
+
+// func (client *Client) GetTrackSubtitleTranslation(ctx context.Context, params ...musixmatchParams.Param) () {
+//
+// }
