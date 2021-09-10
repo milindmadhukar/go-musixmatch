@@ -3,12 +3,25 @@ package gomusixmatch
 import "time"
 
 type Artist struct {
-	ArtistID        int           `json:"artist_id"`
-	ArtistMbid      string        `json:"artist_mbid"`
-	ArtistName      string        `json:"artist_name"`
-	ArtistAliasList []interface{} `json:"artist_alias_list"`
-	ArtistRating    int           `json:"artist_rating"`
-	UpdatedTime     time.Time     `json:"updated_time"`
+	ArtistID                  int           `json:"artist_id"`
+	ArtistName                string        `json:"artist_name"`
+	ArtistNameTranslationList []interface{} `json:"artist_name_translation_list"`
+	ArtistComment             string        `json:"artist_comment"`
+	ArtistCountry             string        `json:"artist_country"`
+	ArtistAliasList           []struct {
+		ArtistAlias string `json:"artist_alias,omitempty"`
+	} `json:"artist_alias_list,omitempty"`
+	ArtistRating     int    `json:"artist_rating"`
+	ArtistTwitterURL string `json:"artist_twitter_url,omitempty"`
+	ArtistCredits    struct {
+		ArtistList []interface{} `json:"artist_list,omitempty"`
+	} `json:"artist_credits"`
+	Restricted    int       `json:"restricted,omitempty"`
+	UpdatedTime   time.Time `json:"updated_time,omitempty"`
+	BeginDateYear string    `json:"begin_date_year,omitempty"`
+	BeginDate     string    `json:"begin_date,omitempty"`
+	EndDateYear   string    `json:"end_date_year,omitempty"`
+	EndDate       string    `json:"end_date,omitempty"`
 }
 
 type Track struct {
@@ -66,4 +79,35 @@ type MusicGenre struct {
 	MusicGenreName         string `json:"music_genre_name"`
 	MusicGenreNameExtended string `json:"music_genre_name_extended"`
 	MusicGenreVanity       string `json:"music_genre_vanity"`
+}
+
+type Album struct {
+	AlbumID          int    `json:"album_id"`
+	AlbumMbid        string `json:"album_mbid"`
+	AlbumName        string `json:"album_name"`
+	AlbumRating      int    `json:"album_rating"`
+	AlbumReleaseDate string `json:"album_release_date"`
+	ArtistID         int    `json:"artist_id"`
+	ArtistName       string `json:"artist_name"`
+	PrimaryGenres    struct {
+		MusicGenreList []struct {
+			MusicGenre struct {
+				MusicGenreID           int    `json:"music_genre_id"`
+				MusicGenreParentID     int    `json:"music_genre_parent_id"`
+				MusicGenreName         string `json:"music_genre_name"`
+				MusicGenreNameExtended string `json:"music_genre_name_extended"`
+				MusicGenreVanity       string `json:"music_genre_vanity"`
+			} `json:"music_genre"`
+		} `json:"music_genre_list"`
+	} `json:"primary_genres"`
+	AlbumPline     string    `json:"album_pline"`
+	AlbumCopyright string    `json:"album_copyright"`
+	AlbumLabel     string    `json:"album_label"`
+	Restricted     int       `json:"restricted"`
+	UpdatedTime    time.Time `json:"updated_time"`
+	ExternalIds    struct {
+		Spotify     []string `json:"spotify"`
+		Itunes      []string `json:"itunes"`
+		AmazonMusic []string `json:"amazon_music"`
+	} `json:"external_ids"`
 }
