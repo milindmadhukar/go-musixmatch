@@ -8,55 +8,25 @@ import (
 )
 
 type trackSearch struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Available   int     `json:"available,omitempty"`
-		} `json:"header"`
-		Body struct {
-			TrackList []struct {
-				TrackData Track `json:"track,omitempty"`
-			} `json:"track_list"`
-		} `json:"body"`
-	} `json:"message"`
+	TrackList []struct {
+		TrackData Track `json:"track,omitempty"`
+	} `json:"track_list"`
+	Url string `json:"url,omitempty"`
 }
 
 type trackGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Available   int     `json:"available,omitempty"`
-		} `json:"header"`
-		Body struct {
-			TrackData Track `json:"track,omitempty"`
-		} `json:"body"`
-	} `json:"message"`
+	TrackData Track  `json:"track,omitempty"`
+	Url       string `json:"url,omitempty"`
 }
 
 type trackLyricsGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			LyricsData Lyrics `json:"lyrics"`
-		} `json:"body"`
-	} `json:"message"`
+	LyricsData Lyrics `json:"lyrics"`
+	Url        string `json:"url,omitempty"`
 }
 
 type trackSnippetGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			SnippetData Snippet `json:"snippet"`
-		} `json:"body"`
-	} `json:"message"`
+	SnippetData Snippet `json:"snippet"`
+	Url         string  `json:"url,omitempty"`
 }
 
 // Search for track in Musixmatch's database.
@@ -96,14 +66,14 @@ func (client *Client) SearchTrack(ctx context.Context, params ...musixmatchParam
 		return nil, err
 	}
 
+	search_results.Url = url
+
 	return &search_results, nil
 
 }
 
-// TODO
-// List function
-
 func (client *Client) GetTrack(ctx context.Context, params ...musixmatchParams.Param) (*trackGet, error) {
+
 	url := fmt.Sprintf("%strack.get?apikey=%s",
 		client.baseURL,
 		client.apiKey)
@@ -119,6 +89,8 @@ func (client *Client) GetTrack(ctx context.Context, params ...musixmatchParams.P
 	if err != nil {
 		return nil, err
 	}
+
+	get_results.Url = url
 
 	return &get_results, nil
 
@@ -141,6 +113,8 @@ func (client *Client) GetTrackLyrics(ctx context.Context, params ...musixmatchPa
 	if err != nil {
 		return nil, err
 	}
+
+	get_lyrics.Url = url
 
 	return &get_lyrics, nil
 
@@ -168,6 +142,8 @@ func (client *Client) GetTrackSnippet(ctx context.Context, params ...musixmatchP
 	if err != nil {
 		return nil, err
 	}
+
+	get_snippet.Url = url
 
 	return &get_snippet, nil
 

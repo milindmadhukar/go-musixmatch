@@ -8,30 +8,13 @@ import (
 )
 
 type matcherLyricsGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			LyricsData Lyrics `json:"lyrics"`
-		} `json:"body"`
-	} `json:"message"`
+	LyricsData Lyrics `json:"lyrics"`
+	Url        string `json:"url,omitempty"`
 }
 
 type matcherTrackGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Confidence  int     `json:"confidence"`
-			Mode        string  `json:"mode"`
-			Cached      int     `json:"cached"`
-		} `json:"header"`
-		Body struct {
-			TrackData Track `json:"track"`
-		} `json:"body"`
-	} `json:"message"`
+	TrackData Track  `json:"track"`
+	Url       string `json:"url,omitempty"`
 }
 
 func (client *Client) GetMatcherLyrics(ctx context.Context, params ...musixmatchParams.Param) (*matcherLyricsGet, error) {
@@ -52,6 +35,8 @@ func (client *Client) GetMatcherLyrics(ctx context.Context, params ...musixmatch
 	if err != nil {
 		return nil, err
 	}
+
+	get_lyrics.Url = url
 
 	return &get_lyrics, nil
 
@@ -74,6 +59,8 @@ func (client *Client) GetMatcherTrack(ctx context.Context, params ...musixmatchP
 	if err != nil {
 		return nil, err
 	}
+
+	get_track.Url = url
 
 	return &get_track, nil
 

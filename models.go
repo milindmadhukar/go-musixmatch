@@ -1,6 +1,24 @@
 package gomusixmatch
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
+
+type musixMatchResponse struct {
+	Message struct {
+		Header struct {
+			StatusCode  int     `json:"status_code"`
+			ExecuteTime float64 `json:"execute_time"`
+			Available   int     `json:"available,omitempty"`
+			Hint        string  `json:"hint,omitempty"`
+			Confidence  int     `json:"confidence,omitempty"`
+			Mode        string  `json:"mode,omitempty"`
+			Cached      int     `json:"cached,omitempty"`
+		} `json:"header"`
+		Body json.RawMessage `json:"body"`
+	} `json:"message"`
+}
 
 type Artist struct {
 	ArtistID                  int           `json:"artist_id"`

@@ -8,30 +8,15 @@ import (
 )
 
 type albumGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			AlbumData Album `json:"album"`
-		} `json:"body"`
-	} `json:"message"`
+	AlbumData Album  `json:"album"`
+	Url       string `json:"url,omitempty"`
 }
 
 type albumTracksGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Available   int     `json:"available"`
-		} `json:"header"`
-		Body struct {
-			TrackList []struct {
-				TrackData Track `json:"track"`
-			} `json:"track_list"`
-		} `json:"body"`
-	} `json:"message"`
+	TrackList []struct {
+		TrackData Track `json:"track"`
+	} `json:"track_list"`
+	Url string `json:"url,omitempty"`
 }
 
 func (client *Client) GetAlbum(ctx context.Context, params ...musixmatchParams.Param) (*albumGet, error) {
@@ -51,6 +36,8 @@ func (client *Client) GetAlbum(ctx context.Context, params ...musixmatchParams.P
 	if err != nil {
 		return nil, err
 	}
+
+	get_album.Url = url
 
 	return &get_album, nil
 
@@ -73,6 +60,8 @@ func (client *Client) GetAlbumTracks(ctx context.Context, params ...musixmatchPa
 	if err != nil {
 		return nil, err
 	}
+
+	get_album_tracks.Url = url
 
 	return &get_album_tracks, nil
 

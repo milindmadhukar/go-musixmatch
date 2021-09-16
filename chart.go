@@ -8,37 +8,27 @@ import (
 )
 
 type topArtists struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			ArtistList []struct {
-				ArtistData Artist `json:"artist"`
-			} `json:"artist_list"`
-		} `json:"body"`
-	} `json:"message"`
+	ArtistList []struct {
+		ArtistData Artist `json:"artist"`
+	} `json:"artist_list"`
+	Url string `json:"url,omitempty"`
 }
 
 type topTracks struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			TrackList []struct {
-				TrackData Track `json:"track"`
-			} `json:"track_list"`
-		} `json:"body"`
-	} `json:"message"`
+	TrackList []struct {
+		TrackData Track `json:"track"`
+	} `json:"track_list"`
+	Url string `json:"url,omitempty"`
 }
 
 // Gets the API response of the top artists of a given country.
+//
 // ctx       : The context in which the request is made.
+//
 // country   : A valid country code.
-//page      : Define the page number for paginated results.
+//
+// page      : Define the page number for paginated results.
+//
 // page_size : Define the page size for paginated results. Range is 1 to 100.
 func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchParams.Param) (*topArtists, error) {
 
@@ -59,32 +49,28 @@ func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchPar
 		return nil, err
 	}
 
+	topArtists.Url = url
+
 	return &topArtists, nil
 
 }
 
-// Gets the list of top artists as a slice of Artist structs.
-func (topArtists *topArtists) List() *[]Artist {
-
-	var artists []Artist
-
-	for _, artist := range topArtists.Message.Body.ArtistList {
-		artists = append(artists, artist.ArtistData)
-	}
-
-	return &artists
-}
-
 // Gets the API response of the top songs of a given country.
+//
 // ctx        : The context in which the request is made.
+//
 // country    : A valid 2 letters country code. Set XW as worldwide
+//
 // page       : Define the page number for paginated results.
+//
 // page_size  : Define the page size for paginated results. Range is 1 to 100.
+//
 // chart_name : Select among available charts:
 //     top - editorial chart.
 //     hot - Most viewed lyrics in the last 2 hours.
 //     mxmweekly - Most viewed lyrics in the last 7 days.
 //     mxmweekly_new - Most viewed lyrics in the last 7 days limited to new releases only.
+//
 // has_lyrics : When set to true, filters only contents with lyrics.
 func (client *Client) GetTopTracks(ctx context.Context, params ...musixmatchParams.Param) (*topTracks, error) {
 
@@ -106,18 +92,8 @@ func (client *Client) GetTopTracks(ctx context.Context, params ...musixmatchPara
 		return nil, err
 	}
 
+	topTracks.Url = url
+
 	return &topTracks, nil
 
-}
-
-// Gets the list of top tracks as a slice of Track structs.
-func (topTracks *topTracks) List() *[]Track {
-
-	var tracks []Track
-
-	for _, track := range topTracks.Message.Body.TrackList {
-		tracks = append(tracks, track.TrackData)
-	}
-
-	return &tracks
 }

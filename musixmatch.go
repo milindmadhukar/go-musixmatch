@@ -5,8 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -33,8 +31,6 @@ func (client *Client) get(ctx context.Context, url string, response interface{})
 		return err
 	}
 
-	fmt.Println(req.URL)
-
 	resp, err := client.http.Do(req)
 
 	if err != nil {
@@ -51,23 +47,26 @@ func (client *Client) get(ctx context.Context, url string, response interface{})
 
 	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
-	type apiResponse struct {
-		Message struct {
-			Header struct {
-				StatusCode  int     `json:"status_code"`
-				ExecuteTime float64 `json:"execute_time"`
-				Available   int     `json:"available,omitempty"`
-				Hint        string  `json:"hint,omitempty"`
-			} `json:"header"`
-			Body interface{} `json:"body"`
-		} `json:"message"`
-	}
-	var result apiResponse
+	// type apiResponse struct {
+	// 	Message struct {
+	// 		Header struct {
+	// 			StatusCode  int     `json:"status_code"`
+	// 			ExecuteTime float64 `json:"execute_time"`
+	// 			Available   int     `json:"available,omitempty"`
+	// 			Hint        string  `json:"hint,omitempty"`
+	// 		} `json:"header"`
+	// 		Body interface{} `json:"body"`
+	// 	} `json:"message"`
+	// }
+
+	var result musixMatchResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
 
 	if err != nil {
 		return err
 	}
+
+	defer resp.Body.Close()
 
 	switch result.Message.Header.StatusCode {
 
@@ -99,11 +98,7 @@ func (client *Client) get(ctx context.Context, url string, response interface{})
 		return errors.New("Musixmatch's system is a bit busy at the moment and your request can’t be satisfied.")
 	}
 
-	resp.Body = io.NopCloser(bytes.NewBuffer(body))
-
-	defer resp.Body.Close()
-
-	err = json.NewDecoder(resp.Body).Decode(response)
+	err = json.Unmarshal(result.Message.Body, &response)
 
 	if err != nil {
 		return err

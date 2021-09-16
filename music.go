@@ -6,17 +6,10 @@ import (
 )
 
 type musicGenresGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			MusicGenreList []struct {
-				MusicGenreData MusicGenre `json:"music_genre"`
-			} `json:"music_genre_list"`
-		} `json:"body"`
-	} `json:"message"`
+	MusicGenreList []struct {
+		MusicGenreData MusicGenre `json:"music_genre"`
+	} `json:"music_genre_list"`
+	Url string `json:"url,omitempty"`
 }
 
 func (client *Client) GetMusicGenres(ctx context.Context) (*musicGenresGet, error) {
@@ -31,6 +24,8 @@ func (client *Client) GetMusicGenres(ctx context.Context) (*musicGenresGet, erro
 	if err != nil {
 		return nil, err
 	}
+
+	get_genres.Url = url
 
 	return &get_genres, nil
 

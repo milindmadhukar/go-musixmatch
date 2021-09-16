@@ -8,60 +8,29 @@ import (
 )
 
 type artistGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			ArtistData Artist `json:"artist"`
-		} `json:"body"`
-	} `json:"message"`
+	ArtistData Artist `json:"artist"`
+	Url        string `json:"url,omitempty"`
 }
 
 type artistSearch struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Available   int     `json:"available"`
-		} `json:"header"`
-		Body struct {
-			ArtistList []struct {
-				ArtistData Artist `json:"artist"`
-			} `json:"artist_list"`
-		} `json:"body"`
-	} `json:"message"`
+	ArtistList []struct {
+		ArtistData Artist `json:"artist"`
+	} `json:"artist_list"`
+	Url string `json:"url,omitempty"`
 }
 
 type artistAlbumGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			ExecuteTime float64 `json:"execute_time"`
-			Available   int     `json:"available"`
-		} `json:"header"`
-		Body struct {
-			AlbumList []struct {
-				AlbumData Album `json:"album"`
-			} `json:"album_list"`
-		} `json:"body"`
-	} `json:"message"`
+	AlbumList []struct {
+		AlbumData Album `json:"album"`
+	} `json:"album_list"`
+	Url string `json:"url,omitempty"`
 }
 
 type artistRelatedGet struct {
-	Message struct {
-		Header struct {
-			StatusCode  int     `json:"status_code"`
-			Available   int     `json:"available"`
-			ExecuteTime float64 `json:"execute_time"`
-		} `json:"header"`
-		Body struct {
-			ArtistList []struct {
-				ArtistData Artist `json:"artist"`
-			} `json:"artist_list"`
-		} `json:"body"`
-	} `json:"message"`
+	ArtistList []struct {
+		ArtistData Artist `json:"artist"`
+	} `json:"artist_list"`
+	Url string `json:"url,omitempty"`
 }
 
 func (client *Client) GetArtist(ctx context.Context, params ...musixmatchParams.Param) (*artistGet, error) {
@@ -81,6 +50,8 @@ func (client *Client) GetArtist(ctx context.Context, params ...musixmatchParams.
 	if err != nil {
 		return nil, err
 	}
+
+	get_artist.Url = url
 
 	return &get_artist, nil
 
@@ -105,6 +76,8 @@ func (client *Client) SearchArtist(ctx context.Context, params ...musixmatchPara
 		return nil, err
 	}
 
+	search_artist.Url = url
+
 	return &search_artist, nil
 
 }
@@ -128,6 +101,7 @@ func (client *Client) GetArtistAlbums(ctx context.Context, params ...musixmatchP
 		return nil, err
 	}
 
+	get_artist_albums.Url = url
 	return &get_artist_albums, nil
 
 }
@@ -149,6 +123,8 @@ func (client *Client) GetRelatedArtists(ctx context.Context, params ...musixmatc
 	if err != nil {
 		return nil, err
 	}
+
+	get_related_artist.Url = url
 
 	return &get_related_artist, nil
 
