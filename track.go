@@ -83,14 +83,9 @@ func (client *Client) SearchTrack(ctx context.Context, params ...musixmatchParam
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var search_results trackSearch
@@ -112,14 +107,9 @@ func (client *Client) GetTrack(ctx context.Context, params ...musixmatchParams.P
 	url := fmt.Sprintf("%strack.get?apikey=%s",
 		client.baseURL,
 		client.apiKey)
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_results trackGet
@@ -139,14 +129,9 @@ func (client *Client) GetTrackLyrics(ctx context.Context, params ...musixmatchPa
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_lyrics trackLyricsGet
@@ -171,14 +156,9 @@ func (client *Client) GetTrackSnippet(ctx context.Context, params ...musixmatchP
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_snippet trackSnippetGet

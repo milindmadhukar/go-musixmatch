@@ -69,14 +69,9 @@ func (client *Client) GetArtist(ctx context.Context, params ...musixmatchParams.
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_artist artistGet
@@ -97,14 +92,9 @@ func (client *Client) SearchArtist(ctx context.Context, params ...musixmatchPara
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var search_artist artistSearch
@@ -125,14 +115,9 @@ func (client *Client) GetArtistAlbums(ctx context.Context, params ...musixmatchP
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_artist_albums artistAlbumGet
@@ -152,14 +137,9 @@ func (client *Client) GetRelatedArtists(ctx context.Context, params ...musixmatc
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_related_artist artistRelatedGet

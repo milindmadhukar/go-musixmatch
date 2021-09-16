@@ -40,14 +40,9 @@ func (client *Client) GetMatcherLyrics(ctx context.Context, params ...musixmatch
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_lyrics matcherLyricsGet
@@ -67,14 +62,9 @@ func (client *Client) GetMatcherTrack(ctx context.Context, params ...musixmatchP
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var get_track matcherTrackGet

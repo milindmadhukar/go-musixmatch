@@ -46,14 +46,9 @@ func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchPar
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	url, err := processParams(url, params...)
 	if err != nil {
 		return nil, err
-	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
 	}
 
 	var topArtists topArtists
@@ -97,17 +92,13 @@ func (client *Client) GetTopTracks(ctx context.Context, params ...musixmatchPara
 		client.baseURL,
 		client.apiKey)
 
-	options, err := processParams(params...)
+	var topTracks topTracks
+
+	url, err := processParams(url, params...)
+
 	if err != nil {
 		return nil, err
 	}
-	urlParams := options.UrlParams.Encode()
-
-	if urlParams != "" {
-		url += "&" + urlParams
-	}
-
-	var topTracks topTracks
 
 	err = client.get(ctx, url, &topTracks)
 
