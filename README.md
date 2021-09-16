@@ -52,7 +52,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(results.Message.Body.ArtistList[0])
+	fmt.Println(results.ArtistList[0])
 }
 ```
 
