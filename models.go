@@ -14,7 +14,7 @@ type Artist struct {
 	ArtistRating     int    `json:"artist_rating"`
 	ArtistTwitterURL string `json:"artist_twitter_url,omitempty"`
 	ArtistCredits    struct {
-		ArtistList []interface{} `json:"artist_list,omitempty"`
+		ArtistList []Artist `json:"artist_list,omitempty"`
 	} `json:"artist_credits"`
 	Restricted    int       `json:"restricted,omitempty"`
 	UpdatedTime   time.Time `json:"updated_time,omitempty"`
@@ -91,13 +91,7 @@ type Album struct {
 	ArtistName       string `json:"artist_name"`
 	PrimaryGenres    struct {
 		MusicGenreList []struct {
-			MusicGenre struct {
-				MusicGenreID           int    `json:"music_genre_id"`
-				MusicGenreParentID     int    `json:"music_genre_parent_id"`
-				MusicGenreName         string `json:"music_genre_name"`
-				MusicGenreNameExtended string `json:"music_genre_name_extended"`
-				MusicGenreVanity       string `json:"music_genre_vanity"`
-			} `json:"music_genre"`
+			MusicGenreData MusicGenre `json:"music_genre"`
 		} `json:"music_genre_list"`
 	} `json:"primary_genres"`
 	AlbumPline     string    `json:"album_pline"`
