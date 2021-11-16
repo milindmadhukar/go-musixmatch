@@ -17,6 +17,11 @@ type matcherTrackGet struct {
 	Url       string `json:"url,omitempty"`
 }
 
+// Get the lyrics for track based on title and artist
+//
+// Parameters:
+//     QueryTrack  - The song title
+//     QueryArtist - The song artist
 func (client *Client) GetMatcherLyrics(ctx context.Context, params ...musixmatchParams.Param) (*matcherLyricsGet, error) {
 
 	url := fmt.Sprintf("%smatcher.lyrics.get?apikey=%s",
@@ -28,20 +33,31 @@ func (client *Client) GetMatcherLyrics(ctx context.Context, params ...musixmatch
 		return nil, err
 	}
 
-	var get_lyrics matcherLyricsGet
+	var getLyrics matcherLyricsGet
 
-	err = client.get(ctx, url, &get_lyrics)
+	err = client.get(ctx, url, &getLyrics)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_lyrics.Url = url
+	getLyrics.Url = url
 
-	return &get_lyrics, nil
+	return &getLyrics, nil
 
 }
 
+// In some cases you already have some informations about the track title, artist name, album etc.
+
+// A possible strategy to get the corresponding lyrics could be:
+// search our catalogue with a perfect match,
+// maybe try using the fuzzy search,
+// maybe try again using artist aliases, and so on.
+//
+// Parameters:
+//     QueryTrack  - The song title
+//     QueryArtist - The song artist
+//     QueryAlbum  - The song album
 func (client *Client) GetMatcherTrack(ctx context.Context, params ...musixmatchParams.Param) (*matcherTrackGet, error) {
 	url := fmt.Sprintf("%smatcher.track.get?apikey=%s",
 		client.baseURL,
@@ -52,17 +68,17 @@ func (client *Client) GetMatcherTrack(ctx context.Context, params ...musixmatchP
 		return nil, err
 	}
 
-	var get_track matcherTrackGet
+	var getTrack matcherTrackGet
 
-	err = client.get(ctx, url, &get_track)
+	err = client.get(ctx, url, &getTrack)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_track.Url = url
+	getTrack.Url = url
 
-	return &get_track, nil
+	return &getTrack, nil
 
 }
 

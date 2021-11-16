@@ -30,13 +30,15 @@ type trackSnippetGet struct {
 }
 
 // Search for track in Musixmatch's database.
-// q_track                                      - The song title
-// q_artist                                     - The song artist
-// q_lyrics                                     - Any word in the lyrics
-// q_track_artist                               - Any word in the song title or artist name
-// q_writer                                     - Search among writers
-// q                                            - Any word in the song title or artist name or lyrics
-// f_artist_id                                  - When set, filter by this artist id
+//
+// Parameters:
+//
+// QueryTrack                                      - The song title
+// QueryArtist                                    - The song artist
+// QueryLyrics                                  - Any word in the lyrics
+// QueryWriter                                     - Search among writers
+// Query                                            - Any word in the song title or artist name or lyrics
+// ArtistID                                  - When set, filter by this artist id
 // f_music_genre_id                             - When set, filter by this music category id
 // f_lyrics_language                            - Filter by the lyrics language (en,it,..)
 // f_has_lyrics                                 - When set, filter only contents with lyrics
@@ -58,17 +60,17 @@ func (client *Client) SearchTrack(ctx context.Context, params ...musixmatchParam
 		return nil, err
 	}
 
-	var search_results trackSearch
+	var searchResults trackSearch
 
-	err = client.get(ctx, url, &search_results)
+	err = client.get(ctx, url, &searchResults)
 
 	if err != nil {
 		return nil, err
 	}
 
-	search_results.Url = url
+	searchResults.Url = url
 
-	return &search_results, nil
+	return &searchResults, nil
 
 }
 
@@ -82,17 +84,17 @@ func (client *Client) GetTrack(ctx context.Context, params ...musixmatchParams.P
 		return nil, err
 	}
 
-	var get_results trackGet
+	var getResults trackGet
 
-	err = client.get(ctx, url, &get_results)
+	err = client.get(ctx, url, &getResults)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_results.Url = url
+	getResults.Url = url
 
-	return &get_results, nil
+	return &getResults, nil
 
 }
 
@@ -106,17 +108,17 @@ func (client *Client) GetTrackLyrics(ctx context.Context, params ...musixmatchPa
 		return nil, err
 	}
 
-	var get_lyrics trackLyricsGet
+	var getLyrics trackLyricsGet
 
-	err = client.get(ctx, url, &get_lyrics)
+	err = client.get(ctx, url, &getLyrics)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_lyrics.Url = url
+	getLyrics.Url = url
 
-	return &get_lyrics, nil
+	return &getLyrics, nil
 
 }
 
@@ -135,17 +137,17 @@ func (client *Client) GetTrackSnippet(ctx context.Context, params ...musixmatchP
 		return nil, err
 	}
 
-	var get_snippet trackSnippetGet
+	var getSnippet trackSnippetGet
 
-	err = client.get(ctx, url, &get_snippet)
+	err = client.get(ctx, url, &getSnippet)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_snippet.Url = url
+	getSnippet.Url = url
 
-	return &get_snippet, nil
+	return &getSnippet, nil
 
 }
 

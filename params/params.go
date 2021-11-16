@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Param func(*Params)
@@ -18,18 +19,18 @@ type Params struct {
 // Localization
 
 // The country code of the desired country.
-func Country(country_code string) Param {
+func Country(countryCode string) Param {
 
 	var err error
 
-	_, found := findInSlice(countryCodes, country_code)
+	_, found := findInSlice(countryCodes, countryCode)
 
 	if !found {
-		err = errors.New(fmt.Sprintf("%s is not a valid country code. You may use XW for worldwide charts.", country_code))
+		err = errors.New(fmt.Sprintf("%s is not a valid country code. You may use XW for worldwide charts.", countryCode))
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("country", country_code)
+		param.UrlParams.Set("country", countryCode)
 		param.Err = err
 	}
 }
@@ -105,6 +106,13 @@ func QueryArtist(q_artist string) Param {
 func QueryLyrics(q_lyrics string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q_lyrics", q_lyrics)
+	}
+}
+
+// searches for a text string among writer
+func QueryWriter(q_writer string) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("q_writer", q_writer)
 	}
 }
 
@@ -217,6 +225,24 @@ func HasSubtitle(has_subtitle bool) Param {
 	}
 }
 
+func FilterByArtistID(f_artist_id int) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_artist_id", strconv.Itoa(f_artist_id))
+	}
+}
+
+func FilterByMusicGenreID(f_music_genre_id int) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_music_genre_id", strconv.Itoa(f_music_genre_id))
+	}
+}
+
+func FilterByMininiumReleaseDate(f_track_release_date_min time.Time) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_track_release_group_first_release_date_min", f_track_release_date_min.Format("YYYYMMDD"))
+	}
+}
+
 // TODO
 // f_music_genre_id - Filter by objects with a specific music category
 // f_subtitle_length - Filter subtitles by a given duration in seconds
@@ -233,17 +259,17 @@ func HasSubtitle(has_subtitle bool) Param {
 //     hot           : Most viewed lyrics in the last 2 hours
 //     mxmweekly     : Most viewed lyrics in the last 7 days
 //     mxmweekly_new : Most viewed lyrics in the last 7 days limited to new releases only
-func ChartName(chart_name string) Param {
+func ChartName(chartName string) Param {
 
 	var err error
 
-	_, ok := chart_names[chart_name]
+	_, ok := chartNames[chartName]
 	if !ok {
-		err = errors.New(fmt.Sprintf("%s is not a valid chart name.", chart_name))
+		err = errors.New(fmt.Sprintf("%s is not a valid chart name.", chartName))
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("chart_name", chart_name)
+		param.UrlParams.Set("chart_name", chartName)
 		param.Err = err
 	}
 }

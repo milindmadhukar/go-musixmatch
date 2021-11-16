@@ -33,6 +33,11 @@ type artistRelatedGet struct {
 	Url string `json:"url,omitempty"`
 }
 
+// Get the artist data from Musixmatch's database.
+//
+// Parameters:
+//     ArtistID   - Musixmatch artist id
+//     ArtistMbID - Musicbrainz artist id
 func (client *Client) GetArtist(ctx context.Context, params ...musixmatchParams.Param) (*artistGet, error) {
 	url := fmt.Sprintf("%sartist.get?apikey=%s",
 		client.baseURL,
@@ -43,20 +48,28 @@ func (client *Client) GetArtist(ctx context.Context, params ...musixmatchParams.
 		return nil, err
 	}
 
-	var get_artist artistGet
+	var getArtist artistGet
 
-	err = client.get(ctx, url, &get_artist)
+	err = client.get(ctx, url, &getArtist)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_artist.Url = url
+	getArtist.Url = url
 
-	return &get_artist, nil
+	return &getArtist, nil
 
 }
 
+// Search for artists in Musixmatch's database.
+//
+// Parameters:
+//     QueryArtist - The song artist
+//     ArtistID    - When set, filter by this artist id
+//     ArtistMbID  - When set, filter by this artist musicbrainz id
+//     Page        - Define the page number for paginated results
+//     PageSize    - Define the page size for paginated results. Range is 1 to 100.
 func (client *Client) SearchArtist(ctx context.Context, params ...musixmatchParams.Param) (*artistSearch, error) {
 
 	url := fmt.Sprintf("%sartist.search?apikey=%s",
@@ -68,20 +81,29 @@ func (client *Client) SearchArtist(ctx context.Context, params ...musixmatchPara
 		return nil, err
 	}
 
-	var search_artist artistSearch
+	var searchArtist artistSearch
 
-	err = client.get(ctx, url, &search_artist)
+	err = client.get(ctx, url, &searchArtist)
 
 	if err != nil {
 		return nil, err
 	}
 
-	search_artist.Url = url
+	searchArtist.Url = url
 
-	return &search_artist, nil
+	return &searchArtist, nil
 
 }
 
+// Get the album discography of an artist
+//
+// Parameters:
+//     ArtistID          - Musixmatch artist id
+//     ArtistMbID        - Musicbrainz artist id
+//     GroupByAlbumName  - Group by Album Name
+//     SortByReleaseDate - Sort by release date (asc|desc)
+//     Page              - Define the page number for paginated results
+//     PageSize          - Define the page size for paginated results. Range is 1 to 100.
 func (client *Client) GetArtistAlbums(ctx context.Context, params ...musixmatchParams.Param) (*artistAlbumGet, error) {
 
 	url := fmt.Sprintf("%sartist.albums.get?apikey=%s",
@@ -93,19 +115,26 @@ func (client *Client) GetArtistAlbums(ctx context.Context, params ...musixmatchP
 		return nil, err
 	}
 
-	var get_artist_albums artistAlbumGet
+	var getArtistAlbums artistAlbumGet
 
-	err = client.get(ctx, url, &get_artist_albums)
+	err = client.get(ctx, url, &getArtistAlbums)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_artist_albums.Url = url
-	return &get_artist_albums, nil
+	getArtistAlbums.Url = url
+	return &getArtistAlbums, nil
 
 }
 
+//Get a list of artists somehow related to a given one.
+//
+// Parameters:
+//     ArtistID          - Musixmatch artist id
+//     ArtistMbID        - Musicbrainz artist id
+//     Page              - Define the page number for paginated results
+//     PageSize          - Define the page size for paginated results. Range is 1 to 100.
 func (client *Client) GetRelatedArtists(ctx context.Context, params ...musixmatchParams.Param) (*artistRelatedGet, error) {
 	url := fmt.Sprintf("%sartist.related.get?apikey=%s",
 		client.baseURL,
@@ -116,16 +145,16 @@ func (client *Client) GetRelatedArtists(ctx context.Context, params ...musixmatc
 		return nil, err
 	}
 
-	var get_related_artist artistRelatedGet
+	var getRelatedArtist artistRelatedGet
 
-	err = client.get(ctx, url, &get_related_artist)
+	err = client.get(ctx, url, &getRelatedArtist)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_related_artist.Url = url
+	getRelatedArtist.Url = url
 
-	return &get_related_artist, nil
+	return &getRelatedArtist, nil
 
 }

@@ -16,12 +16,12 @@ type Client struct {
 }
 
 func New(apiKey string, httpClient *http.Client) *Client {
-	client := &Client{
+	client := Client{
 		http:    httpClient,
 		baseURL: "https://api.musixmatch.com/ws/1.1/",
 		apiKey:  apiKey,
 	}
-	return client
+	return &client
 }
 
 func (client *Client) get(ctx context.Context, url string, response interface{}) error {
@@ -46,18 +46,6 @@ func (client *Client) get(ctx context.Context, url string, response interface{})
 	resp.Body.Close()
 
 	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-
-	// type apiResponse struct {
-	// 	Message struct {
-	// 		Header struct {
-	// 			StatusCode  int     `json:"status_code"`
-	// 			ExecuteTime float64 `json:"execute_time"`
-	// 			Available   int     `json:"available,omitempty"`
-	// 			Hint        string  `json:"hint,omitempty"`
-	// 		} `json:"header"`
-	// 		Body interface{} `json:"body"`
-	// 	} `json:"message"`
-	// }
 
 	var result musixMatchResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)

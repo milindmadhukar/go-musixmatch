@@ -12,21 +12,22 @@ type musicGenresGet struct {
 	Url string `json:"url,omitempty"`
 }
 
+// Get the list of the music genres of Musixmatch's catalogue.
 func (client *Client) GetMusicGenres(ctx context.Context) (*musicGenresGet, error) {
 	url := fmt.Sprintf("%smusic.genres.get?apikey=%s",
 		client.baseURL,
 		client.apiKey)
 
-	var get_genres musicGenresGet
+	var getGenres musicGenresGet
 
-	err := client.get(ctx, url, &get_genres)
+	err := client.get(ctx, url, &getGenres)
 
 	if err != nil {
 		return nil, err
 	}
 
-	get_genres.Url = url
+	getGenres.Url = url
 
-	return &get_genres, nil
+	return &getGenres, nil
 
 }

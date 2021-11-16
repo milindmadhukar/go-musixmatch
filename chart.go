@@ -23,13 +23,10 @@ type topTracks struct {
 
 // Gets the API response of the top artists of a given country.
 //
-// ctx       : The context in which the request is made.
-//
-// country   : A valid country code.
-//
-// page      : Define the page number for paginated results.
-//
-// page_size : Define the page size for paginated results. Range is 1 to 100.
+// Parameters:
+//     Country   - A valid country code.
+//     Page      - Define the page number for paginated results.
+//     PageSize  - Define the page size for paginated results. Range is 1 to 100.
 func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchParams.Param) (*topArtists, error) {
 
 	url := fmt.Sprintf("%schart.artists.get?apikey=%s",
@@ -57,21 +54,16 @@ func (client *Client) GetTopArtists(ctx context.Context, params ...musixmatchPar
 
 // Gets the API response of the top songs of a given country.
 //
-// ctx        : The context in which the request is made.
-//
-// country    : A valid 2 letters country code. Set XW as worldwide
-//
-// page       : Define the page number for paginated results.
-//
-// page_size  : Define the page size for paginated results. Range is 1 to 100.
-//
-// chart_name : Select among available charts:
-//     top - editorial chart.
-//     hot - Most viewed lyrics in the last 2 hours.
-//     mxmweekly - Most viewed lyrics in the last 7 days.
-//     mxmweekly_new - Most viewed lyrics in the last 7 days limited to new releases only.
-//
-// has_lyrics : When set to true, filters only contents with lyrics.
+// Parameters:
+//     Country    - A valid 2 letters country code. Set XW as worldwide
+//     Page       - Define the page number for paginated results.
+//     PageSize  - Define the page size for paginated results. Range is 1 to 100.
+//     ChartName - Select among available charts:
+//         top : editorial chart.
+//         hot : Most viewed lyrics in the last 2 hours.
+//         mxmweekly : Most viewed lyrics in the last 7 days.
+//         mxmweekly_new : Most viewed lyrics in the last 7 days limited to new releases only.
+//     HasLyrics - When set to true, filters only contents with lyrics.
 func (client *Client) GetTopTracks(ctx context.Context, params ...musixmatchParams.Param) (*topTracks, error) {
 
 	url := fmt.Sprintf("%schart.tracks.get?apikey=%s",
