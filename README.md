@@ -1,11 +1,13 @@
 
 # Go-Musixmatch!
 
-This is a WIP Go wrapper for working with the [Musixmatch](https://www.musixmatch.com/) API.
+This is a Go wrapper for working with the [Musixmatch](https://www.musixmatch.com/) API.
+
+Documentation can be found at: [Go-Musixmatch Documentation](https://pkg.go.dev/github.com/milindmadhukar/go-musixmatch)
 
 It aims to support every task listed in the Web API Endpoint Reference, located [here](https://developer.musixmatch.com/documentation).
 
-*Most of the API endpoints are covered. Docs in progress.*
+*All of the API endpoints are covered except the premium ones.*
 
 
 ## 💻 Installation
@@ -52,13 +54,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(artists[0])
+        fmt.Println((*artists)[0])
+
 }
 ```
 
 ### Output
 ```go
-{{24407895 Martin Garrix []  NL [{MARTIJN GARRITSEN}] 71  {[]} 0 2017-02-03 07:02:12 +0000 UTC 1996 1996-05-15  0000-00-00}}
+{24407895 Martin Garrix [91 93]  NL [{MARTIJN GARRITSEN}] 67  {[]} 0 2017-02-03 07:02:12 +0000 UTC 1996 1996-05-15  0000-00-00}
 ```
 
 
