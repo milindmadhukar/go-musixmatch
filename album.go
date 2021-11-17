@@ -2,79 +2,52 @@ package gomusixmatch
 
 import (
 	"context"
-	"fmt"
 
-	musixmatchParams "github.com/milindmadhukar/go-musixmatch/params"
+	mxmParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
-type albumGet struct {
-	AlbumData Album  `json:"album"`
-	Url       string `json:"url,omitempty"`
-}
+/*Get an album from Musixmatch's database: name, release_date, release_type, cover art.
 
-type albumTracksGet struct {
-	TrackList []struct {
-		TrackData Track `json:"track"`
-	} `json:"track_list"`
-	Url string `json:"url,omitempty"`
-}
+Parameters :
+    AlbumID - The musixmatch album id
+*/
+func (client *Client) GetAlbum(ctx context.Context, params ...mxmParams.Param) (*Album, error) {
+	var albumData album
 
-// Get an album from Musixmatch's database: name, release_date, release_type, cover art.
-//
-// Parameters :
-//     AlbumID - The musixmatch album id
-func (client *Client) GetAlbum(ctx context.Context, params ...musixmatchParams.Param) (*albumGet, error) {
-	url := fmt.Sprintf("%salbum.get?apikey=%s",
-		client.baseURL,
-		client.apiKey)
-
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
-
-	var getAlbum albumGet
-
-	err = client.get(ctx, url, &getAlbum)
+	err := client.get(ctx, "album.get", &albumData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	getAlbum.Url = url
-
-	return &getAlbum, nil
+	return &albumData.AlbumData, nil
 
 }
 
-// Get the list of the songs of an album.
-//
-// Parameters:
-//     AlbumID   - Musixmatch album id
-//     AlbumMbId - Musicbrainz album id
-//     HasLyrics - When set, filter only contents with lyrics
-//     Page      - Define the page number for paginated results
-//     PageSize  - Define the page size for paginated results. Range is 1 to 100.
-func (client *Client) GetAlbumTracks(ctx context.Context, params ...musixmatchParams.Param) (*albumTracksGet, error) {
-	url := fmt.Sprintf("%salbum.tracks.get?apikey=%s",
-		client.baseURL,
-		client.apiKey)
+/*Get the list of the songs of an album.
 
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
+Parameters:
+    AlbumID   - Musixmatch album id
+    AlbumMbId - Musicbrainz album id
+    HasLyrics - When set, filter only contents with lyrics
+    Page      - Define the page number for paginated results
+    PageSize  - Define the page size for paginated results. Range is 1 to 100.
+*/
+func (client *Client) GetAlbumTracks(ctx context.Context, params ...mxmParams.Param) (*[]Track, error) {
+	var tracksData trackList
 
-	var getAlbumTracks albumTracksGet
-
-	err = client.get(ctx, url, &getAlbumTracks)
+	err := client.get(ctx, "album.tracks.get", &tracksData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	getAlbumTracks.Url = url
+	var tracks []Track
 
-	return &getAlbumTracks, nil
+	for _, track := range tracksData.TrackList {
+		tracks = append(tracks, track.TrackData)
+	}
+
+	return &tracks, nil
 
 }

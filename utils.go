@@ -3,11 +3,11 @@ package gomusixmatch
 import (
 	"net/url"
 
-	musixmatchParams "github.com/milindmadhukar/go-musixmatch/params"
+	mxmParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
-func processParams(musixMatchUrl string, params ...musixmatchParams.Param) (string, error) {
-	p := musixmatchParams.Params{
+func processParams(musixMatchUrl string, params ...mxmParams.Param) (string, error) {
+	p := mxmParams.Params{
 		UrlParams: url.Values{},
 	}
 	for _, param := range params {

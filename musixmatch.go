@@ -1,51 +1,56 @@
 package gomusixmatch
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"fmt"
 	"net/http"
+
+	mxmParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
+// Musixmatch request client that holds the API key and the http client.
 type Client struct {
-	http    *http.Client
-	baseURL string
-	apiKey  string
+	HttpClient *http.Client
+	BaseURL    string
+	ApiKey     string
 }
 
+// Creates a new Musixmatch client to make requests to the api.
 func New(apiKey string, httpClient *http.Client) *Client {
 	client := Client{
-		http:    httpClient,
-		baseURL: "https://api.musixmatch.com/ws/1.1/",
-		apiKey:  apiKey,
+		HttpClient: httpClient,
+		BaseURL:    "https://api.musixmatch.com/ws/1.1",
+		ApiKey:     apiKey,
 	}
 	return &client
 }
 
-func (client *Client) get(ctx context.Context, url string, response interface{}) error {
+func (client *Client) get(ctx context.Context, endpoint string, response interface{}, params ...mxmParams.Param) error {
+
+	url := fmt.Sprintf("%s/%s?apikey=%s",
+		client.BaseURL,
+		endpoint,
+		client.ApiKey)
+
+	url, err := processParams(url, params...)
+	if err != nil {
+		return err
+	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
 
-	resp, err := client.http.Do(req)
+	resp, err := client.HttpClient.Do(req)
 
 	if err != nil {
 		return err
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		return err
-	}
-
-	resp.Body.Close()
-
-	resp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	defer resp.Body.Close()
 
 	var result musixMatchResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
@@ -95,3 +100,13 @@ func (client *Client) get(ctx context.Context, url string, response interface{})
 	return nil
 
 }
+
+// Didn't do coz premium features not available.
+// TODO: track.lyrics.post
+// TODO: track.lyrics.mood.get
+// TODO: track.richsync.get
+// TODO: track.lyrics.translation.get
+// TODO: track.subtitle.translation.get
+// TODO: tracking.url.get
+// TODO: catalogue.dump.get
+// TODO: work.post

@@ -2,123 +2,91 @@ package gomusixmatch
 
 import (
 	"context"
-	"fmt"
 
-	musixmatchParams "github.com/milindmadhukar/go-musixmatch/params"
+	mxmParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
-type trackSearch struct {
-	TrackList []struct {
-		TrackData Track `json:"track,omitempty"`
-	} `json:"track_list"`
-	Url string `json:"url,omitempty"`
-}
+/*
+Search for track in Musixmatch's database.
 
-type trackGet struct {
-	TrackData Track  `json:"track,omitempty"`
-	Url       string `json:"url,omitempty"`
-}
+Parameters:
 
-type trackLyricsGet struct {
-	LyricsData Lyrics `json:"lyrics"`
-	Url        string `json:"url,omitempty"`
-}
+		QueryTrack                  - The song title
+		QueryArtist                 - The song artist
+		QueryLyrics                 - Any word in the lyrics
+		QueryTrackArtist            - Any word in the song title or artist name
+		QueryWriter                 - Search among writers
+		Query                       - Any word in the song title or artist name or lyrics
+		FilterByArtistID            - When set, filter by this artist id
+		FilterByMusicGenreID        - When set, filter by this music category id
+	 	FilterByLyricsLanguage      - Filter by the lyrics language (en,it,..)
+		HasLyrics                   - When set, filter only contents with lyrics
+		FilterByMininiumReleaseDate - When set, filter the tracks with release date newer than value, format is YYYYMMDD
+		FilterByMininiumReleaseDate - When set, filter the tracks with release date older than value, format is YYYYMMDD
+		SortByArtistRating          - Sort by our popularity index for artists (asc|desc)
+		SortByTrackRating           - Sort by our popularity index for tracks (asc|desc)
+TODO: what is quorum_factor?
+		quorum_factor                                - Search only a part of the given query string.Allowed range is (0.1 – 0.9)
+		Page                                         - Define the page number for paginated results
+		PageSize                                    - Define the page size for paginated results. Range is 1 to 100.
+*/
+func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param) (*[]Track, error) {
 
-type trackSnippetGet struct {
-	SnippetData Snippet `json:"snippet"`
-	Url         string  `json:"url,omitempty"`
-}
+	var trackData trackList
 
-// Search for track in Musixmatch's database.
-//
-// Parameters:
-//
-// QueryTrack                                      - The song title
-// QueryArtist                                    - The song artist
-// QueryLyrics                                  - Any word in the lyrics
-// QueryWriter                                     - Search among writers
-// Query                                            - Any word in the song title or artist name or lyrics
-// ArtistID                                  - When set, filter by this artist id
-// f_music_genre_id                             - When set, filter by this music category id
-// f_lyrics_language                            - Filter by the lyrics language (en,it,..)
-// f_has_lyrics                                 - When set, filter only contents with lyrics
-// f_track_release_group_first_release_date_min - When set, filter the tracks with release date newer than value, format is YYYYMMDD
-// f_track_release_group_first_release_date_max - When set, filter the tracks with release date older than value, format is YYYYMMDD
-// s_artist_rating                              - Sort by our popularity index for artists (asc|desc)
-// s_track_rating                               - Sort by our popularity index for tracks (asc|desc)
-// quorum_factor                                - Search only a part of the given query string.Allowed range is (0.1 – 0.9)
-// page                                         - Define the page number for paginated results
-// page_size                                    - Define the page size for paginated results. Range is 1 to 100.
-func (client *Client) SearchTrack(ctx context.Context, params ...musixmatchParams.Param) (*trackSearch, error) {
-
-	url := fmt.Sprintf("%strack.search?apikey=%s",
-		client.baseURL,
-		client.apiKey)
-
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
-
-	var searchResults trackSearch
-
-	err = client.get(ctx, url, &searchResults)
+	err := client.get(ctx, "track.search", &trackData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	searchResults.Url = url
+	var tracks []Track
 
-	return &searchResults, nil
+	for _, track := range trackData.TrackList {
+		tracks = append(tracks, track.TrackData)
+	}
+
+	return &tracks, nil
 
 }
 
-func (client *Client) GetTrack(ctx context.Context, params ...musixmatchParams.Param) (*trackGet, error) {
+/*
+Get a track info from musixmatch's database: title, artist, isrc(s), instrumental flag.
 
-	url := fmt.Sprintf("%strack.get?apikey=%s",
-		client.baseURL,
-		client.apiKey)
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
+Parameters:
+		CommonTrackID - The Musixmatch commontrack id
+		TrackISRC     - A valid ISRC identifier
+*/
+func (client *Client) GetTrack(ctx context.Context, params ...mxmParams.Param) (*Track, error) {
+	var trackData track
 
-	var getResults trackGet
-
-	err = client.get(ctx, url, &getResults)
+	err := client.get(ctx, "track.get", &trackData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	getResults.Url = url
-
-	return &getResults, nil
+	return &trackData.TrackData, nil
 
 }
 
-func (client *Client) GetTrackLyrics(ctx context.Context, params ...musixmatchParams.Param) (*trackLyricsGet, error) {
-	url := fmt.Sprintf("%strack.lyrics.get?apikey=%s",
-		client.baseURL,
-		client.apiKey)
+/*
+Get the lyrics of a track.
 
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
+Parameters:
+		TrackID       - The Musixmatch track id
+		CommonTrackID - The Musixmatch commontrack id
+*/
+func (client *Client) GetTrackLyrics(ctx context.Context, params ...mxmParams.Param) (*Lyrics, error) {
+	var lyricsData lyrics
 
-	var getLyrics trackLyricsGet
-
-	err = client.get(ctx, url, &getLyrics)
+	err := client.get(ctx, "track.lyrics.get", &lyricsData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	getLyrics.Url = url
-
-	return &getLyrics, nil
+	return &lyricsData.LyricsData, nil
 
 }
 
@@ -126,28 +94,24 @@ func (client *Client) GetTrackLyrics(ctx context.Context, params ...musixmatchPa
 //
 // }
 
-func (client *Client) GetTrackSnippet(ctx context.Context, params ...musixmatchParams.Param) (*trackSnippetGet, error) {
+/*
+Get the snippet for a given track.
+A lyrics snippet is a very short representation of a song lyrics. It’s usually twenty to a hundred characters long and it’s calculated extracting a sequence of words from the lyrics.
 
-	url := fmt.Sprintf("%strack.snippet.get?apikey=%s",
-		client.baseURL,
-		client.apiKey)
+Parameters:
+		TrackID - The musixmatch track id
+*/
+func (client *Client) GetTrackSnippet(ctx context.Context, params ...mxmParams.Param) (*Snippet, error) {
 
-	url, err := processParams(url, params...)
-	if err != nil {
-		return nil, err
-	}
+	var snippetData snippet
 
-	var getSnippet trackSnippetGet
-
-	err = client.get(ctx, url, &getSnippet)
+	err := client.get(ctx, "track.snippet.get", &snippetData, params...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	getSnippet.Url = url
-
-	return &getSnippet, nil
+	return &snippetData.SnippetData, nil
 
 }
 

@@ -9,8 +9,10 @@ import (
 	"time"
 )
 
+// Function to pass the Params struct.
 type Param func(*Params)
 
+// Struct that contains all url parameters and erros (if any).
 type Params struct {
 	UrlParams url.Values
 	Err       error
@@ -18,7 +20,7 @@ type Params struct {
 
 // Localization
 
-// The country code of the desired country.
+// A valid country code. (default US)
 func Country(countryCode string) Param {
 
 	var err error
@@ -26,7 +28,7 @@ func Country(countryCode string) Param {
 	_, found := findInSlice(countryCodes, countryCode)
 
 	if !found {
-		err = errors.New(fmt.Sprintf("%s is not a valid country code. You may use XW for worldwide charts.", countryCode))
+		err = fmt.Errorf("%s is not a valid country code. You may use XW for worldwide charts.", countryCode)
 	}
 
 	return func(param *Params) {
@@ -65,67 +67,81 @@ func CommonTrackID(commontrack_id int) Param {
 	}
 }
 
-// musicbrainz recording or track id
+// Musicbrainz recording or track id
 func TrackMbID(track_mbid int) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("track_mbid", strconv.Itoa(track_mbid))
 	}
 }
 
-// musicbrainz artist id
+// Musicbrainz artist id
 func ArtistMbID(artist_mbid int) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("artist_mbid", strconv.Itoa(artist_mbid))
 	}
 }
 
-// musicbrainz release id
+// Musicbrainz release id
 func AlbumMbID(albim_mbid int) Param {
 	return func(param *Params) {
-		param.UrlParams.Set("albim_mbid", strconv.Itoa(albim_mbid))
+		param.UrlParams.Set("album_mbid", strconv.Itoa(albim_mbid))
 	}
 }
 
 // Querying
 
-// search for a text string among song titles
+// Search for a text string among song titles
 func QueryTrack(q_track string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q_track", q_track)
 	}
 }
 
-// search for a text string among artist names
+// Search for a text string among artist names
 func QueryArtist(q_artist string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q_artist", q_artist)
 	}
 }
 
-// search for a text string among lyrics
+// Search for any word in the song title or artist name
+func QueryTrackArtist(q_track_artist string) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("q_track_artist", q_track_artist)
+	}
+}
+
+// Search for a text string among lyrics
 func QueryLyrics(q_lyrics string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q_lyrics", q_lyrics)
 	}
 }
 
-// searches for a text string among writer
+// Searches for a text string among writer
 func QueryWriter(q_writer string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q_writer", q_writer)
 	}
 }
 
-// search for a text string among song titles,artist names and lyrics
+// Search for a text string among song titles,artist names and lyrics
 func Query(q string) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("q", q)
 	}
 }
 
+// A valid ISRC(International Standard Recording Code) to query.
+func TrackISRC(track_isrc string) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("track_isrc", track_isrc)
+	}
+}
+
 //Sorting
 
-// Sort the results by our popularity index for tracks, possible values are ASC | DESC
+// Sort the results by musixmatch's popularity index for tracks, possible values are ASC | DESC
 func SortByTrackRating(order string) Param {
 	var err error
 
@@ -134,7 +150,7 @@ func SortByTrackRating(order string) Param {
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("s_track_rating", order)
+		param.UrlParams.Set("s_track_rating", strings.ToUpper(order))
 		param.Err = err
 	}
 }
@@ -148,12 +164,12 @@ func SortByReleaseDate(order string) Param {
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("s_track_release_date", order)
+		param.UrlParams.Set("s_track_release_date", strings.ToUpper(order))
 		param.Err = err
 	}
 }
 
-// Sort the results by our popularity index for artists, possible values are ASC | DESC
+// Sort the results by musixmatch's popularity index for artists, possible values are ASC | DESC
 func SortByArtistRating(order string) Param {
 	var err error
 
@@ -162,21 +178,21 @@ func SortByArtistRating(order string) Param {
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("s_artist_rating", order)
+		param.UrlParams.Set("s_artist_rating", strings.ToUpper(order))
 		param.Err = err
 	}
 }
 
 // Result Set Pagination
 
-// Request specific result page.
+// Define the page number for paginated results
 func Page(page int) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("page", strconv.Itoa(page))
 	}
 }
 
-// Specify number of items per result page (range 1 to 100)
+// Define the page size for paginated results. Range is 1 to 100.
 func PageSize(page_size int) Param {
 	var err error
 	if page_size < 1 || page_size > 100 {
@@ -190,7 +206,7 @@ func PageSize(page_size int) Param {
 
 // Filtering
 
-// Filter by objects with available lyrics
+// When set, filter only contents with lyrics
 func HasLyrics(has_lyrics bool) Param {
 	var has_lyrics_int int
 	if has_lyrics {
@@ -225,31 +241,63 @@ func HasSubtitle(has_subtitle bool) Param {
 	}
 }
 
+// When set, filter by this artist id
 func FilterByArtistID(f_artist_id int) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("f_artist_id", strconv.Itoa(f_artist_id))
 	}
 }
 
+// Filter by objects with a given musicbrainz artist id
+func FilterByArtistMbID(f_artist_mbid int) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_artist_mbid", strconv.Itoa(f_artist_mbid))
+	}
+}
+
+// When set, filter by this music category id
 func FilterByMusicGenreID(f_music_genre_id int) Param {
 	return func(param *Params) {
 		param.UrlParams.Set("f_music_genre_id", strconv.Itoa(f_music_genre_id))
 	}
 }
 
-func FilterByMininiumReleaseDate(f_track_release_date_min time.Time) Param {
+// Filter by the lyrics language (en,it,..)
+func FilterByLyricsLanguage(f_lyrics_language string) Param {
 	return func(param *Params) {
-		param.UrlParams.Set("f_track_release_group_first_release_date_min", f_track_release_date_min.Format("YYYYMMDD"))
+		param.UrlParams.Set("f_lyrics_language", f_lyrics_language)
 	}
 }
 
-// TODO
-// f_music_genre_id - Filter by objects with a specific music category
-// f_subtitle_length - Filter subtitles by a given duration in seconds
-// f_subtitle_length_max_deviation - Apply a deviation to a given subtitle duration (in seconds)
-// f_lyrics_language - Filter the tracks by lyrics language
-// f_artist_id - Filter by objects with a given Musixmatch artist_id
-// f_artist_mbid - Filter by objects with a given musicbrainz artist id
+// When set, filter the tracks with release date newer than value, format is YYYYMMDD
+func FilterByMininiumReleaseDate(f_track_release_date_min time.Time) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_track_release_group_first_release_date_min",
+			f_track_release_date_min.Format("20060102"))
+	}
+}
+
+// When set, filter the tracks with release date older than value, format is YYYYMMDD
+func FilterByMaximumReleaseDate(f_track_release_date_max time.Time) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_track_release_group_first_release_date_max",
+			f_track_release_date_max.Format("20060102"))
+	}
+}
+
+// Filter subtitles by a given duration in seconds
+func FilterBySubtitleLength(f_subtitle_length time.Duration) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_subtitle_length", strconv.Itoa(int(f_subtitle_length.Seconds())))
+	}
+}
+
+// Apply a deviation to a given subtitle duration (in seconds)
+func FilterBySubtitleLengthMaxDeviation(f_subtitle_length_max_deviation time.Duration) Param {
+	return func(param *Params) {
+		param.UrlParams.Set("f_subtitle_length_max_deviation", strconv.Itoa(int(f_subtitle_length_max_deviation.Seconds())))
+	}
+}
 
 // Other
 
@@ -265,22 +313,11 @@ func ChartName(chartName string) Param {
 
 	_, ok := chartNames[chartName]
 	if !ok {
-		err = errors.New(fmt.Sprintf("%s is not a valid chart name.", chartName))
+		err = fmt.Errorf("%s is not a valid chart name.", chartName)
 	}
 
 	return func(param *Params) {
 		param.UrlParams.Set("chart_name", chartName)
 		param.Err = err
 	}
-}
-
-// Helper functions
-
-func findInSlice(slice []string, val string) (int, bool) {
-	for i, item := range slice {
-		if item == val {
-			return i, true
-		}
-	}
-	return -1, false
 }

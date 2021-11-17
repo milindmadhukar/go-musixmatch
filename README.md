@@ -39,20 +39,20 @@ import (
 	"log"
 	"net/http"
 
-	musixmatch "github.com/milindmadhukar/go-musixmatch"
+	mxm "github.com/milindmadhukar/go-musixmatch"
 	"github.com/milindmadhukar/go-musixmatch/params"
 )
 
 func main() {
 
-	client := musixmatch.New("<YOUR API KEY>", http.DefaultClient)
+	client := mxm.New("<YOUR API KEY>", http.DefaultClient)
 
-	results, err := client.SearchArtist(context.Background(), params.QueryArtist("Martin Garrix"))
+	artists, err := client.SearchArtist(context.Background(), params.QueryArtist("Martin Garrix"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(results.Message.Body.ArtistList[0])
+	fmt.Println(artists[0])
 }
 ```
 
