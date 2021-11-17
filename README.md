@@ -30,7 +30,7 @@ The module helps with the usage of the [Musixmatch](https://developer.musixmatch
 ## 🏁 Basic Setup:
 For all the endpoints and parameters that can be used, check the [Musixmatch API docs](https://developer.musixmatch.com/documentation)
 
-```
+```go
 package main
 
 import (
@@ -57,7 +57,7 @@ func main() {
 ```
 
 ### Output
-```
+```go
 {{24407895 Martin Garrix []  NL [{MARTIJN GARRITSEN}] 71  {[]} 0 2017-02-03 07:02:12 +0000 UTC 1996 1996-05-15  0000-00-00}}
 ```
 
