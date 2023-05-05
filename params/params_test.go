@@ -75,7 +75,7 @@ func TestParams(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(parsedParams.Get("country"), "IN", t)
+	assert(parsedParams.Get("country"), "in", t)
 	assert(parsedParams.Get("track_id"), "123", t)
 	assert(parsedParams.Get("artist_id"), "234", t)
 	assert(parsedParams.Get("album_id"), "456", t)

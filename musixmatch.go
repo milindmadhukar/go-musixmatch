@@ -59,8 +59,6 @@ func (client *Client) get(ctx context.Context, endpoint string, response interfa
 		return err
 	}
 
-	defer resp.Body.Close()
-
 	switch result.Message.Header.StatusCode {
 
 	case http.StatusNoContent:

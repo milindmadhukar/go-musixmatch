@@ -17,7 +17,7 @@ var client = musixmatch.New("<YOUR API KEY>", http.DefaultClient)
 // INFO: Martin Garrix ft. Bonn - High On Life ID : 154554016
 
 const martinID = 24407895
-const a21ID = 50722792
+const a21ID = 53946947
 const a21AlbumID = 47919158
 const highOnLifeID = 154554016
 
@@ -106,7 +106,7 @@ func TestGetMatcherTrack(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(track.Name, "High On Life", t)
+	assert(track.Name, "High On Life (feat. Bonn)", t)
 
 }
 
@@ -120,14 +120,14 @@ func TestGetTrack(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(track.Name, "High On Life", t)
+	assert(track.Name, "High on Life (feat. Bonn)", t)
 }
 
 func TestSearchTrack(t *testing.T) {
 	tracks, err := client.SearchTrack(
 		context.Background(),
 		params.QueryTrack("high on life"),
-		params.QueryArtist("martin garrix"),
+		params.QueryLyrics("killed the demons"),
 	)
 
 	if err != nil {
@@ -163,6 +163,21 @@ func TestGetTrackSnippet(t *testing.T) {
 
 	assert(snippet.Body, "High on life 'til the day we die", t)
 
+}
+
+func TestTopTracks(t *testing.T) {
+	_, err := client.GetTopTracks(
+		context.Background(),
+		params.Page(1),
+		params.PageSize(3),
+		params.Country("it"),
+	)
+
+  // TODO: Get tracks and test top
+
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 }
 
 // TODO: TestGetRelatedArtists

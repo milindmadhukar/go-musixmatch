@@ -25,14 +25,14 @@ func Country(countryCode string) Param {
 
 	var err error
 
-	_, found := findInSlice(countryCodes, countryCode)
+	_, found := findInSlice(countryCodes, strings.ToUpper(countryCode))
 
 	if !found {
 		err = fmt.Errorf("%s is not a valid country code. You may use XW for worldwide charts.", countryCode)
 	}
 
 	return func(param *Params) {
-		param.UrlParams.Set("country", countryCode)
+		param.UrlParams.Set("country", strings.ToLower(countryCode))
 		param.Err = err
 	}
 }

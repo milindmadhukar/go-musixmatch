@@ -34,9 +34,9 @@ type Artist struct {
 
 		Furthermore, when you search for "psy gangnam style" or "싸이 gangnam style" with our search/match api you will still be able to find the song.
 	*/
+	Comment             string          `json:"artist_comment"`
 	NameTranslationList json.RawMessage `json:"artist_name_translation_list"`
 	// An artist comment is a short snippet of text which can be mainly used for disambiguation.
-	Comment string `json:"artist_comment"`
 	// The artist country is the born country of the artist/group
 	Country   string `json:"artist_country"`
 	AliasList []struct {
@@ -163,7 +163,7 @@ type albumList struct {
 }
 
 type track struct {
-	TrackData Track `json:"track,omitempty"`
+	TrackData Track `json:"track"`
 }
 
 type trackList struct {
