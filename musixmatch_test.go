@@ -49,7 +49,7 @@ func TestGetAlbumTracks(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert((*album_tracks)[0].Name, "21", t)
+	assert(album_tracks[0].Name, "21", t)
 }
 
 func TestGetArtist(t *testing.T) {
@@ -70,7 +70,7 @@ func TestSearchArtist(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert((*artists)[0].Name, "Martin Garrix", t)
+	assert(artists[0].Name, "Martin Garrix", t)
 }
 
 func TestGetArtistAlbums(t *testing.T) {
@@ -79,7 +79,7 @@ func TestGetArtistAlbums(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert((*albums)[0].Name, "Greatest Hits Vol. 1", t)
+	assert(albums[0].Name, "Greatest Hits Vol. 1", t)
 }
 
 func TestGetMatcherLyrics(t *testing.T) {
@@ -134,7 +134,7 @@ func TestSearchTrack(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert((*tracks)[0].Name, "High On Life", t)
+	assert(tracks[0].Name, "High On Life", t)
 }
 
 func TestGetTrackLyrics(t *testing.T) {
@@ -173,7 +173,7 @@ func TestTopTracks(t *testing.T) {
 		params.Country("it"),
 	)
 
-  // TODO: Get tracks and test top
+	// TODO: Get tracks and test top
 
 	if err != nil {
 		t.Errorf(err.Error())
