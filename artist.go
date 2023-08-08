@@ -6,11 +6,13 @@ import (
 	mxmParams "github.com/milindmadhukar/go-musixmatch/params"
 )
 
-/*Get the artist data from Musixmatch's database.
+/*
+Get the artist data from Musixmatch's database.
 
 Parameters:
-    ArtistID   - Musixmatch artist id
-    ArtistMbID - Musicbrainz artist id
+
+	ArtistID   - Musixmatch artist id
+	ArtistMbID - Musicbrainz artist id
 */
 func (client *Client) GetArtist(ctx context.Context, params ...mxmParams.Param) (*Artist, error) {
 	var artistData artist
@@ -25,16 +27,18 @@ func (client *Client) GetArtist(ctx context.Context, params ...mxmParams.Param) 
 
 }
 
-/*Search for artists in Musixmatch's database.
+/*
+Search for artists in Musixmatch's database.
 
 Parameters:
-    QueryArtist - The song artist
-    ArtistID    - When set, filter by this artist id
-    ArtistMbID  - When set, filter by this artist musicbrainz id
-    Page        - Define the page number for paginated results
-    PageSize    - Define the page size for paginated results. Range is 1 to 100.
+
+	QueryArtist - The song artist
+	ArtistID    - When set, filter by this artist id
+	ArtistMbID  - When set, filter by this artist musicbrainz id
+	Page        - Define the page number for paginated results
+	PageSize    - Define the page size for paginated results. Range is 1 to 100.
 */
-func (client *Client) SearchArtist(ctx context.Context, params ...mxmParams.Param) (*[]Artist, error) {
+func (client *Client) SearchArtist(ctx context.Context, params ...mxmParams.Param) ([]*Artist, error) {
 
 	var artistsData artistList
 
@@ -44,27 +48,29 @@ func (client *Client) SearchArtist(ctx context.Context, params ...mxmParams.Para
 		return nil, err
 	}
 
-	var artists []Artist
+	var artists []*Artist
 
 	for _, artist := range artistsData.ArtistList {
-		artists = append(artists, artist.ArtistData)
+		artists = append(artists, &artist.ArtistData)
 	}
 
-	return &artists, nil
+	return artists, nil
 
 }
 
-/*Get the album discography of an artist
+/*
+Get the album discography of an artist
 
 Parameters:
-    ArtistID          - Musixmatch artist id
-    ArtistMbID        - Musicbrainz artist id
-    GroupByAlbumName  - Group by Album Name
-    SortByReleaseDate - Sort by release date (asc|desc)
-    Page              - Define the page number for paginated results
-    PageSize          - Define the page size for paginated results. Range is 1 to 100.
+
+	ArtistID          - Musixmatch artist id
+	ArtistMbID        - Musicbrainz artist id
+	GroupByAlbumName  - Group by Album Name
+	SortByReleaseDate - Sort by release date (asc|desc)
+	Page              - Define the page number for paginated results
+	PageSize          - Define the page size for paginated results. Range is 1 to 100.
 */
-func (client *Client) GetArtistAlbums(ctx context.Context, params ...mxmParams.Param) (*[]Album, error) {
+func (client *Client) GetArtistAlbums(ctx context.Context, params ...mxmParams.Param) ([]*Album, error) {
 
 	var albumsData albumList
 
@@ -74,25 +80,27 @@ func (client *Client) GetArtistAlbums(ctx context.Context, params ...mxmParams.P
 		return nil, err
 	}
 
-	var albums []Album
+	var albums []*Album
 
 	for _, album := range albumsData.AlbumList {
-		albums = append(albums, album.AlbumData)
+		albums = append(albums, &album.AlbumData)
 	}
 
-	return &albums, nil
+	return albums, nil
 
 }
 
-/*Get a list of artists somehow related to a given one.
+/*
+Get a list of artists somehow related to a given one.
 
 Parameters:
-    ArtistID          - Musixmatch artist id
-    ArtistMbID        - Musicbrainz artist id
-    Page              - Define the page number for paginated results
-    PageSize          - Define the page size for paginated results. Range is 1 to 100.
+
+	ArtistID          - Musixmatch artist id
+	ArtistMbID        - Musicbrainz artist id
+	Page              - Define the page number for paginated results
+	PageSize          - Define the page size for paginated results. Range is 1 to 100.
 */
-func (client *Client) GetRelatedArtists(ctx context.Context, params ...mxmParams.Param) (*[]Artist, error) {
+func (client *Client) GetRelatedArtists(ctx context.Context, params ...mxmParams.Param) ([]*Artist, error) {
 	var artistData artistList
 
 	err := client.get(ctx, "artist.related.get", &artistData, params...)
@@ -101,12 +109,12 @@ func (client *Client) GetRelatedArtists(ctx context.Context, params ...mxmParams
 		return nil, err
 	}
 
-	var artists []Artist
+	var artists []*Artist
 
 	for _, artist := range artistData.ArtistList {
-		artists = append(artists, artist.ArtistData)
+		artists = append(artists, &artist.ArtistData)
 	}
 
-	return &artists, nil
+	return artists, nil
 
 }

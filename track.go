@@ -25,12 +25,14 @@ Parameters:
 		FilterByMininiumReleaseDate - When set, filter the tracks with release date older than value, format is YYYYMMDD
 		SortByArtistRating          - Sort by our popularity index for artists (asc|desc)
 		SortByTrackRating           - Sort by our popularity index for tracks (asc|desc)
+
 TODO: what is quorum_factor?
-		quorum_factor                                - Search only a part of the given query string.Allowed range is (0.1 – 0.9)
-		Page                                         - Define the page number for paginated results
-		PageSize                                    - Define the page size for paginated results. Range is 1 to 100.
+
+	quorum_factor                                - Search only a part of the given query string.Allowed range is (0.1 – 0.9)
+	Page                                         - Define the page number for paginated results
+	PageSize                                    - Define the page size for paginated results. Range is 1 to 100.
 */
-func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param) (*[]Track, error) {
+func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param) ([]*Track, error) {
 
 	var trackData trackList
 
@@ -40,13 +42,13 @@ func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param
 		return nil, err
 	}
 
-	var tracks []Track
+	var tracks []*Track
 
 	for _, track := range trackData.TrackList {
-		tracks = append(tracks, track.TrackData)
+		tracks = append(tracks, &track.TrackData)
 	}
 
-	return &tracks, nil
+	return tracks, nil
 
 }
 
@@ -54,8 +56,9 @@ func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param
 Get a track info from musixmatch's database: title, artist, isrc(s), instrumental flag.
 
 Parameters:
-		CommonTrackID - The Musixmatch commontrack id
-		TrackISRC     - A valid ISRC identifier
+
+	CommonTrackID - The Musixmatch commontrack id
+	TrackISRC     - A valid ISRC identifier
 */
 func (client *Client) GetTrack(ctx context.Context, params ...mxmParams.Param) (*Track, error) {
 	var trackData track
@@ -74,8 +77,9 @@ func (client *Client) GetTrack(ctx context.Context, params ...mxmParams.Param) (
 Get the lyrics of a track.
 
 Parameters:
-		TrackID       - The Musixmatch track id
-		CommonTrackID - The Musixmatch commontrack id
+
+	TrackID       - The Musixmatch track id
+	CommonTrackID - The Musixmatch commontrack id
 */
 func (client *Client) GetTrackLyrics(ctx context.Context, params ...mxmParams.Param) (*Lyrics, error) {
 	var lyricsData lyrics
@@ -99,7 +103,8 @@ Get the snippet for a given track.
 A lyrics snippet is a very short representation of a song lyrics. It’s usually twenty to a hundred characters long and it’s calculated extracting a sequence of words from the lyrics.
 
 Parameters:
-		TrackID - The musixmatch track id
+
+	TrackID - The musixmatch track id
 */
 func (client *Client) GetTrackSnippet(ctx context.Context, params ...mxmParams.Param) (*Snippet, error) {
 
