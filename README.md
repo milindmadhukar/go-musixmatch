@@ -68,20 +68,18 @@ func main() {
 _These features are not implemented as they are premium users only and give me a 401. If you have access to the endpoints and would like to contribute, please open a PR._
 
 
-https://developer.musixmatch.com/documentation/api-reference/matcher-subtitle-get
-
 #### Unimplemented Endpoints
-- [track.lyrics.post](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-post)
-- [track.lyrics.mood.get](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-mood-get)
-- [track.richsync.get](https://developer.musixmatch.com/documentation/api-reference/track-richsync-get)
-- [track.lyrics.translation.get](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-translation-get)
-- [track.subtitle.translation.get](https://developer.musixmatch.com/documentation/api-reference/track-subtitle-translation-get)
-- [tracking.url.get](https://developer.musixmatch.com/documentation/api-reference/tracking-url-get)
-- [catalogue.dump.get](https://developer.musixmatch.com/documentation/api-reference/catalogue-dump-get)
-- [work.post](https://developer.musixmatch.com/documentation/api-reference/work/work.post)
-- [work.validity.post](https://developer.musixmatch.com/documentation/api-reference/work/work.post)
-- [track.subtitle.get](https://developer.musixmatch.com/documentation/api-reference/track-subtitle-get)
-- [matcher.subtitle.get](https://developer.musixmatch.com/documentation/api-reference/matcher-subtitle-get)
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-lyrics-post" target="_blank">track.lyrics.post</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-lyrics-mood-get" target="_blank">track.lyrics.mood.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-richsync-get" target="_blank">track.richsync.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-lyrics-translation-get" target="_blank">track.lyrics.translation.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-subtitle-translation-get" target="_blank">track.subtitle.translation.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/tracking-url-get" target="_blank">tracking.url.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/catalogue-dump-get" target="_blank">catalogue.dump.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/work/work.post" target="_blank">work.post</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/work/work.post" target="_blank">work.validity.post</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/track-subtitle-get" target="_blank">track.subtitle.get</a>
+- <a href="https://developer.musixmatch.com/documentation/api-reference/matcher-subtitle-get" target="_blank">matcher.subtitle.get</a>
 
 
 
