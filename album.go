@@ -48,9 +48,9 @@ func (client *Client) GetAlbumTracks(ctx context.Context, params ...mxmParams.Pa
 
 	var tracks []*Track
 
-	for _, track := range tracksData.TrackList {
-		tracks = append(tracks, &track.TrackData)
-	}
+  for i := 0; i < len(tracksData.TrackList); i++ {
+    tracks = append(tracks, &tracksData.TrackList[i].TrackData)
+  }
 
 	return tracks, nil
 

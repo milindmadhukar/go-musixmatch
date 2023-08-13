@@ -50,9 +50,12 @@ func (client *Client) SearchArtist(ctx context.Context, params ...mxmParams.Para
 
 	var artists []*Artist
 
-	for _, artist := range artistsData.ArtistList {
-		artists = append(artists, &artist.ArtistData)
+  artistList := artistsData.ArtistList
+
+	for i := 0; i < len(artistList); i++ {
+    artists = append(artists, &artistList[i].ArtistData)
 	}
+
 
 	return artists, nil
 
@@ -82,9 +85,9 @@ func (client *Client) GetArtistAlbums(ctx context.Context, params ...mxmParams.P
 
 	var albums []*Album
 
-	for _, album := range albumsData.AlbumList {
-		albums = append(albums, &album.AlbumData)
-	}
+  for i := 0; i < len(albumsData.AlbumList); i++ {
+    albums = append(albums, &albumsData.AlbumList[i].AlbumData)
+  }
 
 	return albums, nil
 

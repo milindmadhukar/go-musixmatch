@@ -106,7 +106,6 @@ type Snippet struct {
 
 type MusicGenre struct {
 	ID           int    `json:"music_genre_id"`
-	ParentID     int    `json:"music_genre_parent_id"`
 	Name         string `json:"music_genre_name"`
 	NameExtended string `json:"music_genre_name_extended"`
 	Vanity       string `json:"music_genre_vanity"`

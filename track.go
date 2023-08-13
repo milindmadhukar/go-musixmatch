@@ -44,12 +44,11 @@ func (client *Client) SearchTrack(ctx context.Context, params ...mxmParams.Param
 
 	var tracks []*Track
 
-	for _, track := range trackData.TrackList {
-		tracks = append(tracks, &track.TrackData)
-	}
+  for i := 0; i < len(trackData.TrackList); i++ {
+    tracks = append(tracks, &trackData.TrackList[i].TrackData)
+  }
 
 	return tracks, nil
-
 }
 
 /*

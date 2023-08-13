@@ -27,6 +27,20 @@ func assert(expected, got interface{}, t *testing.T) {
 	}
 }
 
+func presentInSlice(slice []string, element string, t *testing.T) {
+	present := false
+	for _, v := range slice {
+		if v == element {
+			present = true
+			break
+		}
+	}
+
+	if !present {
+		t.Errorf("Didn't find %v in %v!", element, slice)
+	}
+}
+
 func TestGetAlbum(t *testing.T) {
 
 	album, err := client.GetAlbum(context.Background(), params.AlbumID(a21AlbumID))
@@ -49,7 +63,16 @@ func TestGetAlbumTracks(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(album_tracks[0].Name, "21", t)
+	var track_names []string
+
+	// Extract all names into a slice
+	for _, track := range album_tracks {
+		track_names = append(track_names, track.Name)
+	}
+
+	presentInSlice(track_names, "All I Need", t)
+	presentInSlice(track_names, "21", t)
+
 }
 
 func TestGetArtist(t *testing.T) {
@@ -70,7 +93,16 @@ func TestSearchArtist(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(artists[0].Name, "Martin Garrix", t)
+  // Get names
+
+  var artist_names []string
+
+  for _, artist := range artists {
+    artist_names = append(artist_names, artist.Name)
+  }
+
+  presentInSlice(artist_names, "Martin Garrix", t)
+
 }
 
 func TestGetArtistAlbums(t *testing.T) {
@@ -134,7 +166,14 @@ func TestSearchTrack(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	assert(tracks[0].Name, "High On Life", t)
+  var track_names []string
+
+  for _, track := range tracks {
+    track_names = append(track_names, track.Name)
+  }
+
+  presentInSlice(track_names, "High On Life", t)
+
 }
 
 func TestGetTrackLyrics(t *testing.T) {
