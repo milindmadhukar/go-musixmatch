@@ -64,9 +64,29 @@ func main() {
 {24407895 Martin Garrix [91 93]  NL [{MARTIJN GARRITSEN}] 67  {[]} 0 2017-02-03 07:02:12 +0000 UTC 1996 1996-05-15  0000-00-00}
 ```
 
+## Missing Features / Known Bugs
+_These features are not implemented as they are premium users only and give me a 401. If you have access to the endpoints and would like to contribute, please open a PR._
+
+
+https://developer.musixmatch.com/documentation/api-reference/matcher-subtitle-get
+
+#### Unimplemented Endpoints
+- [track.lyrics.post](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-post)
+- [track.lyrics.mood.get](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-mood-get)
+- [track.richsync.get](https://developer.musixmatch.com/documentation/api-reference/track-richsync-get)
+- [track.lyrics.translation.get](https://developer.musixmatch.com/documentation/api-reference/track-lyrics-translation-get)
+- [track.subtitle.translation.get](https://developer.musixmatch.com/documentation/api-reference/track-subtitle-translation-get)
+- [tracking.url.get](https://developer.musixmatch.com/documentation/api-reference/tracking-url-get)
+- [catalogue.dump.get](https://developer.musixmatch.com/documentation/api-reference/catalogue-dump-get)
+- [work.post](https://developer.musixmatch.com/documentation/api-reference/work/work.post)
+- [work.validity.post](https://developer.musixmatch.com/documentation/api-reference/work/work.post)
+- [track.subtitle.get](https://developer.musixmatch.com/documentation/api-reference/track-subtitle-get)
+- [matcher.subtitle.get](https://developer.musixmatch.com/documentation/api-reference/matcher-subtitle-get)
+
+
 
 ## 🧿 Extras
 
-If you face any difficulties contact me [here.](https://milindm.me/contact/)
+_There is supposed to be something here idk_
 
 Thats it, have fun ✚✖

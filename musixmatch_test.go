@@ -219,5 +219,9 @@ func TestTopTracks(t *testing.T) {
 	}
 }
 
+// func TestGetLyrics (t *testing.T) {
+//   _, err := client.GetSubtitles()
+// }
+
 // TODO: TestGetRelatedArtists
 // TODO: TestGetMusicGenres
