@@ -3,15 +3,13 @@ package gomusixmatch_test
 import (
 	"context"
 	"net/http"
-	"os"
 	"testing"
 
 	musixmatch "github.com/milindmadhukar/go-musixmatch"
 	"github.com/milindmadhukar/go-musixmatch/params"
 )
 
-
-var client = musixmatch.New(os.Getenv("MUSIXMATCH_API_KEY"), http.DefaultClient)
+var client = musixmatch.New(musixmatch.GetApiKeyFromEnvFile(".env"), http.DefaultClient)
 
 // INFO: Martin Garrix Musixmatch ID : 24407895
 // INFO: AREA21 Musixmatch ID : 50722792
@@ -95,15 +93,15 @@ func TestSearchArtist(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-  // Get names
+	// Get names
 
-  var artist_names []string
+	var artist_names []string
 
-  for _, artist := range artists {
-    artist_names = append(artist_names, artist.Name)
-  }
+	for _, artist := range artists {
+		artist_names = append(artist_names, artist.Name)
+	}
 
-  presentInSlice(artist_names, "Martin Garrix", t)
+	presentInSlice(artist_names, "Martin Garrix", t)
 
 }
 
@@ -168,13 +166,13 @@ func TestSearchTrack(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-  var track_names []string
+	var track_names []string
 
-  for _, track := range tracks {
-    track_names = append(track_names, track.Name)
-  }
+	for _, track := range tracks {
+		track_names = append(track_names, track.Name)
+	}
 
-  presentInSlice(track_names, "High On Life", t)
+	presentInSlice(track_names, "High On Life", t)
 
 }
 

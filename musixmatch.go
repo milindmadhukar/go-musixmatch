@@ -40,8 +40,7 @@ func (client *Client) get(ctx context.Context, endpoint string, response interfa
 		return err
 	}
 
-
-  fmt.Println(url)
+  // fmt.Println(url)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
