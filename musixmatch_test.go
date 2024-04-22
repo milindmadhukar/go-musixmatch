@@ -3,13 +3,15 @@ package gomusixmatch_test
 import (
 	"context"
 	"net/http"
+	"os"
 	"testing"
 
 	musixmatch "github.com/milindmadhukar/go-musixmatch"
 	"github.com/milindmadhukar/go-musixmatch/params"
 )
 
-var client = musixmatch.New("<YOUR API KEY>", http.DefaultClient)
+
+var client = musixmatch.New(os.Getenv("MUSIXMATCH_API_KEY"), http.DefaultClient)
 
 // INFO: Martin Garrix Musixmatch ID : 24407895
 // INFO: AREA21 Musixmatch ID : 50722792
